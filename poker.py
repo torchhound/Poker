@@ -1,11 +1,11 @@
-import poker
+from pokereval.card import Card
 from pokereval.hand_evaluator import HandEvaluator
 import random
 import argparse
 
 def singleDeck():
 	"""Returns a single shuffled deck"""
-	deck = list(poker.Card)
+	deck = [[Card[x, y] for x in range(2, 14), for y in range(1, 4) for __ in range(52)]]
 	return random.shuffle(deck)
 
 def calcFlopWins(decks, players, trials):
@@ -14,23 +14,24 @@ def calcFlopWins(decks, players, trials):
 	"""
 	deck = [] #initialize empty deck
 	count = 0 #number of times player with best cards after the flop wins the hand
-	for x in len(decks): #append shuffled decks
+	for x in range(decks): #append shuffled decks
 		deck.append(singleDeck())
+	random.shuffle(deck)
 	while trials >= 0: #play selected number of hands
 		flopBest = "" #initialize variables
 		winner = ""
 		board = []
 		players = {}
-		for x in len(players): #create hands and add them to dictionary
+		for x in range(players): #create hands and add them to dictionary
 			players[x] = [deck.pop() for __ in range(2)]
 		board.append([deck.pop() for __ in range(3)]) #create the flop
-		for x in len(players): #find the winner after the flop
+		for x in range(players): #find the winner after the flop
 			score = 0
 			if HandEvaluator.evaluate_hand(players[x], board) >= score:
 				flopBest = players[x]
 		board.append(deck.pop()) #create the turn
 		board.append(deck.pop()) #create the river
-		for x in len(players): #find the winner of the hand
+		for x in range(players): #find the winner of the hand
 			score = 0
 			if HandEvaluator.evaluate_hand(players[x], board) >= score:
 				winner = players[x]
@@ -44,7 +45,7 @@ def main():
 	parser.add_argument("players", nargs="?", const=2, type=int)
 	parser.add_argument("trials", nargs="?", const=1, type=int)
 	args = parser.parse_args()
-	calcFlopWins(args.decks, args.players, args.trials)
+	print("count / trials = {}".format(calcFlopWins(args.decks, args.players, args.trials)))
 	
 if __name__ == "__main__":
 	main()
