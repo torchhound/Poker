@@ -1,12 +1,13 @@
 from pokereval.card import Card
-from pokereval.hand_evaluator import HandEvaluator
+#from pokereval.hand_evaluator import HandEvaluator
 import random
 import argparse
 
 def singleDeck():
 	"""Returns a single shuffled deck"""
-	deck = [[Card[x, y] for x in range(2, 14), for y in range(1, 4) for __ in range(52)]]
-	return random.shuffle(deck)
+	deck = [[Card(x, y) for x in range(2, 14) for y in range(1, 4)] for __ in range(52)]
+	#deck = random.shuffle(deck)
+	return deck
 
 def calcFlopWins(decks, players, trials):
 	"""
@@ -15,26 +16,26 @@ def calcFlopWins(decks, players, trials):
 	deck = [] #initialize empty deck
 	count = 0 #number of times player with best cards after the flop wins the hand
 	for x in range(decks): #append shuffled decks
-		deck.append(singleDeck())
+		deck.extend(singleDeck())
 	random.shuffle(deck)
 	while trials >= 0: #play selected number of hands
 		flopBest = "" #initialize variables
 		winner = ""
 		board = []
-		players = {}
+		hands = {}
 		for x in range(players): #create hands and add them to dictionary
-			players[x] = [deck.pop() for __ in range(2)]
+			hands[x] = [deck.pop() for __ in range(2)]
 		board.append([deck.pop() for __ in range(3)]) #create the flop
 		for x in range(players): #find the winner after the flop
 			score = 0
-			if HandEvaluator.evaluate_hand(players[x], board) >= score:
-				flopBest = players[x]
+			if HandEvaluator.evaluate_hand(hands[x], board) >= score:
+				flopBest = hands[x]
 		board.append(deck.pop()) #create the turn
 		board.append(deck.pop()) #create the river
 		for x in range(players): #find the winner of the hand
 			score = 0
-			if HandEvaluator.evaluate_hand(players[x], board) >= score:
-				winner = players[x]
+			if HandEvaluator.evaluate_hand(hands[x], board) >= score:
+				winner = hands[x]
 		if flopBest == winner: #check if the winner of the hand was also on top after the flop
 			count += 1
 	return count / trials 
