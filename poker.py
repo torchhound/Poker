@@ -2,11 +2,14 @@ from pokereval.card import Card
 from pokereval.hand_evaluator import HandEvaluator
 import random
 import argparse
+from itertools import product
 
 def singleDeck():
 	"""Returns a single unshuffled deck"""
-	deck = [[Card(x, y) for x in range(2, 14) for y in range(1, 4)] for __ in range(52)]
-	#deck = random.shuffle(deck)
+	deck = []
+	base = list(product(range(2, 15), range(1, 5)))
+	for args in base:
+		deck.append(Card(*args))
 	return deck
 
 def calcFlopWins(decks, players, trials):
