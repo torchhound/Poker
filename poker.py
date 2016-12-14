@@ -1,3 +1,4 @@
+from __future__ import division
 from pokereval.card import Card
 from pokereval.hand_evaluator import HandEvaluator
 import random
@@ -14,7 +15,12 @@ def singleDeck():
 
 def calcFlopWins(decks, players, trials):
 	"""
-	Lets the user input a number of decks D, a number of players P, and a number of trials N. Then it plays N rounds of texas hold-em with P players and D decks. Returns the percentage of those N rounds in which the player with the best cards after the flop ended up winning the round. So specifically, for each round, after the flop it finds the player with the best cards, and sets total += 1 if that player wins the round, and total += 0 if that player doesn't win. Returns count / N.
+	Lets the user input a number of decks D, a number of players P, and a number of trials N. 
+	Then it plays N rounds of texas hold-em with P players and D decks. 
+	Returns the percentage of those N rounds in which the player with the best cards 
+	after the flop ended up winning the round. So specifically, for each round, after 
+	the flop it finds the player with the best cards, and sets total += 1 if that player wins 
+	the round, and total += 0 if that player doesn't win. Returns count / N.
 	"""
 	try:
 		count = 0 #number of times player with best cards after the flop wins the hand
@@ -35,9 +41,9 @@ def calcFlopWins(decks, players, trials):
 				board.append(Card(3, 2))
 			for x in range(players): #find the winner after the flop
 				score = 0
-				print(len(hands[x]), len(board))
-				if HandEvaluator.evaluate_hand(hands[x], board) >= score:
-					flopBest = hands[x]
+				userScore = HandEvaluator.evaluate_hand(hands[x], board)
+				if userScore >= score:
+					flopBest = x
 			for __ in range(2): #remove padding
 				del board[-1]
 			board.append(deck.pop()) #create the turn
@@ -45,16 +51,17 @@ def calcFlopWins(decks, players, trials):
 			for x in range(players): #find the winner of the hand
 				score = 0
 				if HandEvaluator.evaluate_hand(hands[x], board) >= score:
-					winner = hands[x]
+					winner = x
 			if flopBest == winner: #check if the winner of the hand was also on top after the flop
 				count += 1
+			trials -= 1
 		return count / trials
 	except TypeError as e: #catch error from no args present
 		print("No args present")
 		pass
-	#except Exception as e:
-	#	print("other error")
-	#	pass
+	except KeyError as e: #catch lookup table errors
+		print("Lookup table key error")
+		pass
 			
 def main():
 	parser = argparse.ArgumentParser(description=calcFlopWins.__doc__)
