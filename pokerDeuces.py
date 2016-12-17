@@ -56,9 +56,6 @@ def calcFlopWins(players, trials):
 	except TypeError as e: #catch error from no args present
 		print(e)
 		pass
-	except KeyError as e: #catch lookup table errors
-		print(e)
-		pass
 			
 def main():
 	parser = argparse.ArgumentParser(description=calcFlopWins.__doc__)
