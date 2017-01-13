@@ -1,9 +1,13 @@
 #Poker
 
-Lets the user input a number of a number of players P and a number of trials N. Then it plays N rounds of texas hold-em with P players and 1 deck. Returns the percentage of those N rounds in which the player with the best cards after the flop ended up winning the round. So specifically, for each round, after the flop it finds the player with the best cards, and sets total += 1 if that player wins the round, and total += 0 if that player doesn't win. Returns count / N.
+Lets the user input a number of players P and a number of trials N. The program then plays N rounds of Texas Hold-Em with P players and 1 deck. Finally, it returns the percentage of those N rounds in which the player with the best cards after the flop ended up winning the round.
 
 ##Requirements
 
 Python 2.7
 
 deuces
+
+##Usage
+
+`py -2 pokerDeuces.py players trials`
